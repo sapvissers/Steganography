@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Steganography", "Steganography\Steganography.csproj", "{44437696-7692-4478-BDF8-F4600C27BF9B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Steganography", "Steganography\Steganography.csproj", "{44437696-7692-4478-BDF8-F4600C27BF9B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteganographyTest", "SteganographyTest\SteganographyTest.csproj", "{C5325475-01A3-44C3-8A86-D247EC50EB56}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{44437696-7692-4478-BDF8-F4600C27BF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44437696-7692-4478-BDF8-F4600C27BF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44437696-7692-4478-BDF8-F4600C27BF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5325475-01A3-44C3-8A86-D247EC50EB56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5325475-01A3-44C3-8A86-D247EC50EB56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5325475-01A3-44C3-8A86-D247EC50EB56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5325475-01A3-44C3-8A86-D247EC50EB56}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
