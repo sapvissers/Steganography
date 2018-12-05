@@ -6,6 +6,9 @@
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>SvenVissers</Authors>
     <Company>SvenVissers</Company>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sapvissers/Steganography</RepositoryUrl>
+    <Description>Steganography is a technique for hiding data in the least significant bits of the pixels of an image.</Description>
   </PropertyGroup>
 
   <ItemGroup>

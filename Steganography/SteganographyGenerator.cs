@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SvenVissers.Steganography
 {
-    public class Generator
+    public class SteganographyGenerator
     {
         #region Conceal
         public static Bitmap Conceal(Bitmap image, Message message)

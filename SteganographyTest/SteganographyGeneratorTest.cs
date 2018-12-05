@@ -8,7 +8,7 @@ using Xunit;
 
 namespace SteganographyTest
 {
-    public class GeneratorTest
+    public class SteganographyGeneratorTest
     {
         [Fact]
         public void Should_conceal_and_reveal_the_same_message()
@@ -28,8 +28,8 @@ namespace SteganographyTest
             Message message = new Message(messageBody);
 
             //act
-            Bitmap concealedImage = Generator.Conceal(image, message);
-            Message revealedMessage = Generator.Reveal(concealedImage);
+            Bitmap concealedImage = SteganographyGenerator.Conceal(image, message);
+            Message revealedMessage = SteganographyGenerator.Reveal(concealedImage);
 
             //assert
             Assert.True(revealedMessage.Success);
@@ -57,8 +57,8 @@ namespace SteganographyTest
             Message message = new Message(messageBody);
 
             //act
-            Bitmap concealedImage = await Generator.ConcealAsync(image, message);
-            Message revealedMessage = await Generator.RevealAsync(concealedImage);
+            Bitmap concealedImage = await SteganographyGenerator.ConcealAsync(image, message);
+            Message revealedMessage = await SteganographyGenerator.RevealAsync(concealedImage);
 
             //assert
             Assert.True(revealedMessage.Success);
