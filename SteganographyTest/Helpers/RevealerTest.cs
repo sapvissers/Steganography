@@ -14,6 +14,7 @@ namespace SteganographyTest.Helpers
         public void Should_throw_message_not_found_exception_if_no_message_is_present()
         {
             //arrange
+            Revealer revealer = new Revealer();
             Bitmap image = new Bitmap(5, 5);
             Random random = new Random();
             for (int y = 0; y < 5; y++)
@@ -33,7 +34,7 @@ namespace SteganographyTest.Helpers
             }
 
             //act
-            Action act = () => Revealer.Reveal(image);
+            Action act = () => revealer.Reveal(image);
 
             //assert
             Assert.Throws<MessageNotFoundException>(act);
@@ -43,6 +44,7 @@ namespace SteganographyTest.Helpers
         public void Should_successfully_reveal_message_from_image_with_single_layer_of_bit_depth()
         {
             //arrange
+            Revealer revealer = new Revealer();
             Bitmap testImage = new Bitmap(5, 5);
             testImage.SetPixel(0, 0, Color.FromArgb(255, 1, 1, 1));
             testImage.SetPixel(1, 0, Color.FromArgb(255, 1, 0, 0));
@@ -75,7 +77,7 @@ namespace SteganographyTest.Helpers
             testImage.SetPixel(4, 4, Color.FromArgb(255, 0, 0, 0));
 
             //act
-            Message message = Revealer.Reveal(testImage);
+            Message message = revealer.Reveal(testImage);
 
             //assert
             Assert.True(message.Success);
@@ -88,6 +90,7 @@ namespace SteganographyTest.Helpers
         public void Should_successfully_reveal_message_from_image_with_multiple_layers_of_bit_depth()
         {
             //arrange
+            Revealer revealer = new Revealer();
             Bitmap testImage = new Bitmap(4, 4);
 
             testImage.SetPixel(0, 0, Color.FromArgb(255, 1, 1, 1));
@@ -111,7 +114,7 @@ namespace SteganographyTest.Helpers
             testImage.SetPixel(3, 3, Color.FromArgb(255, 5, 0, 0));
 
             //act
-            Message message = Revealer.Reveal(testImage);
+            Message message = revealer.Reveal(testImage);
 
             //assert
             Assert.True(message.Success);

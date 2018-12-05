@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>SvenVissers.Steganography</RootNamespace>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>SvenVissers</Authors>
+    <Company>SvenVissers</Company>
   </PropertyGroup>
 
   <ItemGroup>

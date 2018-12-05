@@ -13,11 +13,12 @@ namespace SteganographyTest.Helpers
         public void Should_throw_message_to_big_exception_if_image_is_to_small()
         {
             //arrange
+            Concealer concealer = new Concealer();
             Message message = new Message("This is a very big message placed inside a very small image");
             Bitmap testImage = new Bitmap(3, 3);
 
             //act
-            Action act = () => Concealer.Conceal(testImage, message);
+            Action act = () => concealer.Conceal(testImage, message);
 
             //assert
             Assert.Throws<MessageToBigException>(act);
@@ -27,6 +28,7 @@ namespace SteganographyTest.Helpers
         public void Should_successfully_conceal_message_inside_image_with_single_layer_of_bit_depth()
         {
             //arrange
+            Concealer concealer = new Concealer();
             Message message = new Message("Test");
 
             Bitmap testImage = new Bitmap(5, 5);
@@ -70,7 +72,7 @@ namespace SteganographyTest.Helpers
             assertPixels[4, 4] = Color.FromArgb(255, 0, 0, 0);
 
             //act
-            Bitmap resultImage = Concealer.Conceal(testImage, message);
+            Bitmap resultImage = concealer.Conceal(testImage, message);
 
             //assert
             for (int y = 0; y < resultImage.Height; y++)
@@ -87,6 +89,7 @@ namespace SteganographyTest.Helpers
         public void Should_successfully_conceal_message_inside_image_with_multiple_layers_of_bit_depth()
         {
             //arrange
+            Concealer concealer = new Concealer();
             Message message = new Message("This is a bigger message.");
 
             Bitmap testImage = new Bitmap(4, 4);
@@ -120,7 +123,7 @@ namespace SteganographyTest.Helpers
             assertPixels[3, 3] = Color.FromArgb(255, 5, 0, 0);
 
             //act
-            Bitmap resultImage = Concealer.Conceal(testImage, message);
+            Bitmap resultImage = concealer.Conceal(testImage, message);
 
             //assert
             for (int y = 0; y < resultImage.Height; y++)

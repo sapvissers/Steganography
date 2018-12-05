@@ -7,13 +7,13 @@ namespace SvenVissers.Steganography.Messages
 {
     public class Message
     {
+        public const byte prefix = 0x0f;
+        public const byte suffix = 0x00;
+
         public byte NumberOfConcealBits { get; private set; }
         public MessageType MessageType { get; private set; }
         public byte[] BinaryMessageBody { get; private set; }
         public bool Success { get; private set; }
-
-        private readonly byte prefix = 0x0f;
-        private readonly byte suffix = 0x00;
 
         #region constructors
         public Message(string messageBody)
@@ -62,7 +62,7 @@ namespace SvenVissers.Steganography.Messages
         #endregion
 
         #region public methods
-        public void CalculateNumberOfConcealBits(int width, int height)
+        public byte CalculateNumberOfConcealBits(int width, int height)
         {
             // Number of pixels in image times amount of color chanels minus 16 reserved bytes for prefix and numberOfConcealBits, using only one bit per color chanel for this data
             int availableSpace = width * height * 3 - 16;
@@ -76,6 +76,8 @@ namespace SvenVissers.Steganography.Messages
             }
 
             NumberOfConcealBits = Convert.ToByte(messageSize / (availableSpace / 8) + 1);
+
+            return NumberOfConcealBits;
         }
 
         public byte[] GetBinaryMessage()

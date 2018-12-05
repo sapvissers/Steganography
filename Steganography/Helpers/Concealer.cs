@@ -4,77 +4,88 @@ using System.Drawing;
 
 namespace SvenVissers.Steganography.Helpers
 {
-    public static class Concealer
+    public class Concealer
     {
-        public static Bitmap Conceal(Bitmap image, Message message)
+        private int maxPixels;
+        private int imageWidth;
+
+        private int pixelIndex = 0;
+        private int totalBitsConcealed = 0;
+
+        private Message message;
+
+        private bool fullMessageConcealed = false;
+        private byte numberOfConcealBits;
+
+
+        public Bitmap Conceal(Bitmap image, Message message)
         {
-            Bitmap concealedImage = ConcealMessageInBytes(image, message);
-
-            return concealedImage;
-        }
-
-        private static Bitmap ConcealMessageInBytes(Bitmap image, Message message)
-        {
-            int imageWidth = image.Width;
-            int imageHeight = image.Height;
-
-            message.CalculateNumberOfConcealBits(imageWidth, imageHeight);
+            this.message = message;
+            maxPixels = image.Width * image.Height;
+            imageWidth = image.Width;
+            numberOfConcealBits = message.CalculateNumberOfConcealBits(image.Width, image.Height);
 
             Bitmap concealedImage = new Bitmap(image);
-
             BitArray binaryMessage = new BitArray(message.GetBinaryMessage());
-            int bitshiftIndex = 0;
 
-            for (int y = 0; y < imageHeight; y++)
+            concealedImage = ConcealFullMessage(concealedImage, binaryMessage);
+
+            return concealedImage;
+        }
+
+        private Bitmap ConcealFullMessage(Bitmap concealedImage, BitArray binaryMessage)
+        {
+            while (!fullMessageConcealed && pixelIndex < maxPixels)
             {
-                for (int x = 0; x < imageWidth; x++)
-                {
-                    ConcealInPixel(x, y, message, binaryMessage, ref bitshiftIndex, ref concealedImage);
-                }
+                Color pixel = concealedImage.GetPixel(pixelIndex % imageWidth, pixelIndex / imageWidth);
+                pixel = ConcealInPixel(pixel, binaryMessage);
+
+                concealedImage.SetPixel(pixelIndex % imageWidth, pixelIndex / imageWidth, pixel);
+                pixelIndex++;
             }
 
             return concealedImage;
         }
 
-        private static void ConcealInPixel(int x, int y, Message message, BitArray binaryMessage, ref int bitshiftIndex, ref Bitmap image)
+        private Color ConcealInPixel(Color pixel, BitArray binaryMessage)
         {
-            Color pixel = image.GetPixel(x, y);
-
-            byte[] chanels = new byte[3];
-
-            for (int c = 0; c < chanels.Length; c++)
+            for (int c = 0; c < 3; c++)
             {
-                switch (c)
+                byte channel = PixelHelper.GetChannelFromColorByIndex(pixel, (ColorIndex)c);
+                channel = ConcealInPixelChanelByte(channel, binaryMessage);
+
+                pixel = PixelHelper.SetChannelFromColorByIndex(pixel, (ColorIndex)c, channel);
+
+                if (fullMessageConcealed)
                 {
-                    case 0:
-                        chanels[c] = ConcealInPixelChanelByte(pixel.R, ref bitshiftIndex, message, binaryMessage);
-                        break;
-                    case 1:
-                        chanels[c] = ConcealInPixelChanelByte(pixel.G, ref bitshiftIndex, message, binaryMessage);
-                        break;
-                    case 2:
-                        chanels[c] = ConcealInPixelChanelByte(pixel.B, ref bitshiftIndex, message, binaryMessage);
-                        break;
+                    break;
                 }
             }
-            Color newPixel = Color.FromArgb(chanels[0], chanels[1], chanels[2]);
-            image.SetPixel(x, y, newPixel);
+
+            return pixel;
         }
 
-        private static byte ConcealInPixelChanelByte(byte chanel, ref int bitshiftIndex, Message message, BitArray binaryMessage)
+        private byte ConcealInPixelChanelByte(byte chanel, BitArray binaryMessage)
         {
-            int byteIndex = bitshiftIndex / 8;
-            int numberOfConcealedBits = (byteIndex < 2) ? 1 : message.NumberOfConcealBits;
+            int byteIndex = totalBitsConcealed / 8;
+            int numberOfConcealBits = (byteIndex < 2) ? 1 : this.numberOfConcealBits;
 
-            for (int i = 0; i < numberOfConcealedBits; i++)
+            for (int i = 0; i < numberOfConcealBits; i++)
             {
-                if (bitshiftIndex >= binaryMessage.Length)
+                if (totalBitsConcealed >= binaryMessage.Length)
                 {
                     break;
                 }
 
-                ByteHelper.StoreBitValueInByte(ref chanel, i, binaryMessage.Get(bitshiftIndex));
-                bitshiftIndex++;
+                ByteHelper.StoreBitValueInByte(ref chanel, i, binaryMessage.Get(totalBitsConcealed));
+                totalBitsConcealed++;
+
+                fullMessageConcealed = (totalBitsConcealed >= binaryMessage.Count);
+
+                if (fullMessageConcealed)
+                {
+                    break;
+                }
             }
 
             return chanel;
